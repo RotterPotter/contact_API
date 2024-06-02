@@ -61,4 +61,3 @@
 - **Poetry**
 
 Unlock the full potential of your contact management with **contact_API**—a blend of simplicity, efficiency, and powerful features tailored for developers and users alike.
-```
