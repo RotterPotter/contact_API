@@ -1,6 +1,3 @@
-Got it! Here's the updated description:
-
-```markdown
 ### Project Description: contact_API
 
 **contact_API** is a powerful and user-friendly API designed to manage your contacts efficiently. With a sleek interface and robust functionality, it supports essential CRUD operations—Create, Read, Update, and Delete—ensuring seamless management of your contact information.
