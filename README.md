@@ -62,5 +62,3 @@
 
 Unlock the full potential of your contact management with **contact_API**—a blend of simplicity, efficiency, and powerful features tailored for developers and users alike.
 ```
-
-This version includes guidance for creating a virtual environment, installing dependencies from `requirements.txt`, and removes the "Activate Virtual Environment" step.
