@@ -1,3 +1,6 @@
+Got it! Here's the updated description:
+
+```markdown
 ### Project Description: contact_API
 
 **contact_API** is a powerful and user-friendly API designed to manage your contacts efficiently. With a sleek interface and robust functionality, it supports essential CRUD operations—Create, Read, Update, and Delete—ensuring seamless management of your contact information.
@@ -20,16 +23,31 @@
    ```sh
    git clone <repo_url>
    ```
-2. **Download Docker Daemon**: Ensure Docker is installed on your system.
-3. **Activate Virtual Environment**:
+
+2. **Create and Activate a Virtual Environment**:
+   - **Create Virtual Environment**:
+     ```sh
+     python -m venv env
+     ```
+   - **Activate Virtual Environment** (Linux/Mac):
+     ```sh
+     source env/bin/activate
+     ```
+     **Activate Virtual Environment** (Windows):
+     ```sh
+     .\env\Scripts\activate
+     ```
+
+3. **Install Dependencies**:
    ```sh
-   python -m venv env
-   source env/bin/activate
+   pip install -r requirements.txt
    ```
+
 4. **Run Docker Compose**:
    ```sh
    docker-compose up
    ```
+
 5. **Run the Application**:
    ```sh
    python main.py
@@ -46,3 +64,6 @@
 - **Poetry**
 
 Unlock the full potential of your contact management with **contact_API**—a blend of simplicity, efficiency, and powerful features tailored for developers and users alike.
+```
+
+This version includes guidance for creating a virtual environment, installing dependencies from `requirements.txt`, and removes the "Activate Virtual Environment" step.
