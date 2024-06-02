@@ -1,0 +1,48 @@
+### Project Description: contact_API
+
+**contact_API** is a powerful and user-friendly API designed to manage your contacts efficiently. With a sleek interface and robust functionality, it supports essential CRUD operations—Create, Read, Update, and Delete—ensuring seamless management of your contact information.
+
+#### Key Features:
+
+1. **User-Friendly Interface**: Easily manage your contacts with an intuitive and responsive interface.
+2. **Complete CRUD Operations**: Effortlessly create new contacts, view existing ones, update details, and delete contacts as needed.
+3. **Additional Functionalities**:
+   - **Birthday Reminder**: Retrieve contacts who have birthdays within the next 7 days, ensuring you never miss an important date.
+   - **Advanced Search**: Perform searches using any piece of information related to a contact, making it simple to find exactly who you're looking for.
+4. **Developer Tools**:
+   - **Debug Functionality**: Flood the database with fake data for testing and experimentation.
+   - **Database Management**: Clear the entire database with a single click, providing a fresh slate for your development needs.
+5. **Data Validation**: Input data types are rigorously validated using Pydantic schemas, ensuring data integrity and consistency.
+
+#### How to Run:
+
+1. **Clone the Repository**:
+   ```sh
+   git clone <repo_url>
+   ```
+2. **Download Docker Daemon**: Ensure Docker is installed on your system.
+3. **Activate Virtual Environment**:
+   ```sh
+   python -m venv env
+   source env/bin/activate
+   ```
+4. **Run Docker Compose**:
+   ```sh
+   docker-compose up
+   ```
+5. **Run the Application**:
+   ```sh
+   python main.py
+   ```
+
+#### Technologies Used:
+
+- **Python**
+- **FastAPI**
+- **PostgreSQL**
+- **SQLAlchemy**
+- **Pydantic**
+- **Docker**
+- **Poetry**
+
+Unlock the full potential of your contact management with **contact_API**—a blend of simplicity, efficiency, and powerful features tailored for developers and users alike.
