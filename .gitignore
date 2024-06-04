@@ -3,4 +3,4 @@ contacts/__pycache__/
 .venv/
 poetry.lock
 pyproject.toml
-.env/
+.env
