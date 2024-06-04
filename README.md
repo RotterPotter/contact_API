@@ -39,13 +39,25 @@
    ```sh
    pip install -r requirements.txt
    ```
-
-4. **Run Docker Compose**:
+4. **Create .env file**
+   ```sh
+   touch .env
+   ```
+5. **In .env**
+   ```
+   add those variables in your .env file:
+   SECRET_KEY = your JWT secret
+   SECRET_KEY_EMAIL = your JWT secret for email token
+   SENDER = email address for smtp server
+   PASSWORD = password for email address 
+   ```
+   
+6. **Run Docker Compose**:
    ```sh
    docker-compose up
    ```
 
-5. **Run the Application**:
+7. **Run the Application**:
    ```sh
    python main.py
    ```
@@ -59,5 +71,6 @@
 - **Pydantic**
 - **Docker**
 - **Poetry**
+- **smtp**
 
 Unlock the full potential of your contact management with **contact_API**—a blend of simplicity, efficiency, and powerful features tailored for developers and users alike.
