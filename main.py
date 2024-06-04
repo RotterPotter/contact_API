@@ -5,7 +5,25 @@ import auth.routes
 from auth.service import Service
 from fastapi.middleware.cors import CORSMiddleware
 
-app = fastapi.FastAPI()
+from contextlib import asynccontextmanager
+from slowapi import  _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from limiter_config import limiter
+
+
+@asynccontextmanager
+async def lifespan(app: fastapi.FastAPI):
+    global limiter
+
+
+    app.state.limiter = limiter
+    app.add_exception_handler(
+        RateLimitExceeded, _rate_limit_exceeded_handler
+    )
+
+    yield
+
+app = fastapi.FastAPI(lifespan=lifespan)
 
 origins = [
     "http://localhost:4000"

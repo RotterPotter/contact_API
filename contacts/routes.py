@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 import contacts.schemas
 import database
 import contacts.models
 from faker import Faker
 from datetime import datetime
+from limiter_config import limiter
 
 fake = Faker()
 
@@ -22,7 +23,9 @@ async def post_contact(
 
 
 @router.get("")
+@limiter.limit('5/minute')
 async def get_all_contacts(
+    request: Request,
     db = Depends(database.get_db)
 ): #get all contacts
     return [i for i in db.query(contacts.models.Contact).all()]
