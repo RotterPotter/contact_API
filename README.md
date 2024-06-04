@@ -44,20 +44,20 @@
    touch .env
    ```
 5. **In .env**
-   ```
    add those variables in your .env file:
+   ```
    SECRET_KEY = your JWT secret
    SECRET_KEY_EMAIL = your JWT secret for email token
    SENDER = email address for smtp server
    PASSWORD = password for email address 
    ```
    
-6. **Run Docker Compose**:
+7. **Run Docker Compose**:
    ```sh
    docker-compose up
    ```
 
-7. **Run the Application**:
+8. **Run the Application**:
    ```sh
    python main.py
    ```
