@@ -37,8 +37,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(contacts.routes.router, dependencies=[fastapi.Depends(Service.get_current_user)])
-app.include_router(contacts.routes.router_debug, dependencies=[fastapi.Depends(Service.get_current_user)])
+# app.include_router(contacts.routes.router, dependencies=[fastapi.Depends(Service.get_current_user)])
+app.include_router(contacts.routes.router)
+app.include_router(contacts.routes.router_debug)
+# app.include_router(contacts.routes.router_debug, dependencies=[fastapi.Depends(Service.get_current_user)])
 
 app.include_router(auth.routes.router)
 app.include_router(auth.routes.router_debug)

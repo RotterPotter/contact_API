@@ -2,6 +2,7 @@ import sqlalchemy
 import sqlalchemy.orm as orm
 
 DBsession = None
+engine = None
 
 class Base(orm.DeclarativeBase):
     pass
@@ -9,6 +10,7 @@ class Base(orm.DeclarativeBase):
 
 def connect():
     global DBsession
+    global engine
 
     engine = sqlalchemy.create_engine('postgresql+psycopg2://rotter:potter@localhost/mydb')
 

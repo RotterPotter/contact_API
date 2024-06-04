@@ -1,10 +1,17 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, File, UploadFile
 import contacts.schemas
 import database
 import contacts.models
 from faker import Faker
 from datetime import datetime
 from limiter_config import limiter
+
+import cloudinary
+import cloudinary.uploader
+from cloudinary.utils import cloudinary_url
+from dotenv import load_dotenv
+import os 
+
 
 fake = Faker()
 
@@ -93,14 +100,40 @@ async def get_by_query(
 
     return matched 
 
+@router.post("/avatar")
+async def upload_image(
+    contact_id: int,
+    file: UploadFile = File(),
+    db = Depends(database.get_db)
+):
+    load_dotenv()
+
+    cloudinary.config( 
+        cloud_name = os.environ.get('CLOUD_NAME'), 
+        api_key = os.environ.get('CLOUD_KEY'), 
+        api_secret = os.environ.get('CLOUD_SECRET'), 
+        secure=True
+    )
+
+    req = cloudinary.uploader.upload(file.file, public_id="root", overwrite=True)
+
+    src_url = cloudinary.CloudinaryImage('root').build_url(
+        width=500, height=500, crop="auto", version=req.get('version')
+    ) 
+
+    user = db.query(contacts.models.Contact).filter_by(id=contact_id).first()
+    user.avatar = src_url
+    db.commit()
+    return {'ok': True}
 
 
 @router_debug.delete("") #drop contact-model metadata(tables, rows - data)
 async def clear_data(
     db = Depends(database.get_db)
 ):
-    contacts.models.Contact.metadata.drop_all()
-    contacts.models.Contact.metadata.create_all()
+    engine = database.engine
+    contacts.models.Contact.metadata.drop_all(engine)
+    contacts.models.Contact.metadata.create_all(engine)
     db.commit()
 
 @router_debug.post("") # put some test data into database
@@ -114,7 +147,8 @@ async def fake_data_flud(
                                         "lastname": fake.last_name(),
                                         "email": fake.email(),
                                         "phone": fake.phone_number(),
-                                        "birthday": fake.date()
+                                        "birthday": fake.date(),
+                                        "avatar": None
                                         })
         
         db.add(new_contact)
