@@ -49,7 +49,11 @@
    SECRET_KEY = your JWT secret
    SECRET_KEY_EMAIL = your JWT secret for email token
    SENDER = email address for smtp server
-   PASSWORD = password for email address 
+   PASSWORD = password for email address
+
+   CLOUD_NAME = cloudinary name
+   CLOUD_KEY = cloudinary key
+   CLOUD_SECRET = cloudinary secret
    ```
    
 7. **Run Docker Compose**:
@@ -72,5 +76,6 @@
 - **Docker**
 - **Poetry**
 - **smtp**
+- **cloudinaryAPI**
 
 Unlock the full potential of your contact management with **contact_API**—a blend of simplicity, efficiency, and powerful features tailored for developers and users alike.
