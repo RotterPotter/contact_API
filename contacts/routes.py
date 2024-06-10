@@ -22,7 +22,17 @@ router_debug = APIRouter(prefix='/contacts/debug', tags=['contacts debug'])
 async def post_contact(
     contact: contacts.schemas.PostContact,
     db = Depends(database.get_db)
-): #create contact
+): 
+    """
+    Create a new contact.
+    
+    Args:
+        contact (contacts.schemas.PostContact): The contact details to be created.
+        db: Database session dependency.
+
+    Returns:
+        contacts.schemas.PostContact: The created contact.
+    """
     new_contact = contacts.models.Contact(**contact.model_dump())
     db.add(new_contact)
     db.commit()
@@ -34,14 +44,34 @@ async def post_contact(
 async def get_all_contacts(
     request: Request,
     db = Depends(database.get_db)
-): #get all contacts
+): 
+    """
+    Retrieve all contacts.
+
+    Args:
+        request (Request): The HTTP request object.
+        db: Database session dependency.
+
+    Returns:
+        list: A list of all contacts.
+    """
     return [i for i in db.query(contacts.models.Contact).all()]
 
 @router.get("{contact_id}")
 async def get_contact_by_id(
     contact_id:int,
     db = Depends(database.get_db)
-    ): #get contact by param
+): 
+    """
+    Retrieve a contact by its ID.
+
+    Args:
+        contact_id (int): The ID of the contact to retrieve.
+        db: Database session dependency.
+
+    Returns:
+        contacts.models.Contact: The contact with the specified ID.
+    """
     return db.query(contacts.models.Contact).filter_by(id=contact_id).first()
 
 @router.put("{contact_id}")
@@ -49,7 +79,18 @@ async def update_contact(
     contact_id: int,
     new_contact: contacts.schemas.Contact,
     db = Depends(database.get_db),
-): #update existing contact
+): 
+    """
+    Update an existing contact.
+
+    Args:
+        contact_id (int): The ID of the contact to update.
+        new_contact (contacts.schemas.Contact): The new contact details.
+        db: Database session dependency.
+
+    Returns:
+        list: The updated contact.
+    """
     contact = db.query(contacts.models.Contact).filter_by(id=contact_id)
     contact.update(new_contact.__dict__)
     db.commit()
@@ -59,7 +100,17 @@ async def update_contact(
 async def delete_contact(
     contact_id: int,
     db = Depends(database.get_db)
-): #delete contact by id
+): 
+    """
+    Delete a contact by its ID.
+
+    Args:
+        contact_id (int): The ID of the contact to delete.
+        db: Database session dependency.
+
+    Returns:
+        None
+    """
     contact = db.query(contacts.models.Contact).filter_by(id=contact_id)
     contact.delete()
     db.commit()
@@ -69,6 +120,15 @@ async def delete_contact(
 async def get_7_days_birthday_contact(
     db = Depends(database.get_db)
 ): 
+    """
+    Retrieve contacts with birthdays in the next 7 days.
+
+    Args:
+        db: Database session dependency.
+
+    Returns:
+        list: A list of contacts with upcoming birthdays.
+    """
     date_now = datetime.now()
     all_contacts = db.query(contacts.models.Contact).all()
 
@@ -90,11 +150,21 @@ async def get_by_query(
     query: str,
     db = Depends(database.get_db)
 ):
+    """
+    Retrieve contacts matching a specific query.
+
+    Args:
+        query (str): The query string to search for.
+        db: Database session dependency.
+
+    Returns:
+        list: A list of contacts matching the query.
+    """
     all_contacts = db.query(contacts.models.Contact).all()
     
     matched = list()
     for contact in all_contacts:
-        for value in contact.__dict__.values(): # can be optimized
+        for value in contact.__dict__.values(): 
             if str(value) == query:
                 matched.append(contact)
 
@@ -106,6 +176,17 @@ async def upload_image(
     file: UploadFile = File(),
     db = Depends(database.get_db)
 ):
+    """
+    Upload an avatar image for a contact.
+
+    Args:
+        contact_id (int): The ID of the contact to update.
+        file (UploadFile): The image file to upload.
+        db: Database session dependency.
+
+    Returns:
+        dict: A dictionary indicating success.
+    """
     load_dotenv()
 
     cloudinary.config( 
@@ -127,20 +208,39 @@ async def upload_image(
     return {'ok': True}
 
 
-@router_debug.delete("") #drop contact-model metadata(tables, rows - data)
+@router_debug.delete("") 
 async def clear_data(
     db = Depends(database.get_db)
 ):
+    """
+    Drop all contact data and recreate the contact table.
+
+    Args:
+        db: Database session dependency.
+
+    Returns:
+        None
+    """
     engine = database.engine
     contacts.models.Contact.metadata.drop_all(engine)
     contacts.models.Contact.metadata.create_all(engine)
     db.commit()
 
-@router_debug.post("") # put some test data into database
+@router_debug.post("") 
 async def fake_data_flud(
     db = Depends(database.get_db),
     quantity:int = 5
 ):
+    """
+    Populate the database with fake contact data for testing.
+
+    Args:
+        db: Database session dependency.
+        quantity (int, optional): Number of fake contacts to create. Defaults to 5.
+
+    Returns:
+        list: A list of the created fake contacts.
+    """
     new_contacts = list()
     for _ in range(quantity+1):
         new_contact = contacts.models.Contact(**{"firstname": fake.first_name(),
@@ -156,8 +256,3 @@ async def fake_data_flud(
 
     db.commit()
     return new_contacts
-    
-
-
-    
-    
