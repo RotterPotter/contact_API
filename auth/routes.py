@@ -5,7 +5,6 @@ import auth.models
 import auth.service
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 
-
 auth_service = auth.service.Service()
 
 router = APIRouter(
@@ -20,21 +19,26 @@ router_debug = APIRouter(
     # dependencies=[Depends(auth_service.get_current_user)]
 )
 
-
-
-"""
-1. Create route for creating user
-2. Verify email and password
-3. Create access token 
-4. return token
-
-"""
 @router.post("", status_code=status.HTTP_201_CREATED)
 async def create_user(
     user: auth.schemas.User,
     background_tasks: BackgroundTasks,
     db=Depends(database.get_db)
 ):
+    """
+    Create a new user.
+
+    Args:
+        user (auth.schemas.User): The user details to be created.
+        background_tasks (BackgroundTasks): FastAPI BackgroundTasks instance to handle background tasks.
+        db: Database session dependency.
+
+    Raises:
+        HTTPException: If the user already exists.
+
+    Returns:
+        None
+    """
     if db.query(auth.models.User).filter_by(username=user.username).first() is not None:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -51,8 +55,21 @@ async def create_user(
 @router.post("/token")
 async def login_user(
     user_form: OAuth2PasswordRequestForm = Depends(),
-    db = Depends(database.get_db)
+    db=Depends(database.get_db)
 ):
+    """
+    Authenticate user and return an access token.
+
+    Args:
+        user_form (OAuth2PasswordRequestForm): Form data containing username and password.
+        db: Database session dependency.
+
+    Raises:
+        HTTPException: If the user is not registered, the password is invalid, or the email is not verified.
+
+    Returns:
+        auth.schemas.Token: An access token and its type.
+    """
     user = db.query(auth.models.User).filter_by(username=user_form.username).first()
     if user is None:
         raise HTTPException(
@@ -69,7 +86,7 @@ async def login_user(
     if not user.verified:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail='verifie your email address'
+            detail='Verify your email address'
         )
     
     access_token = await auth_service.create_access_token(data={'sub': user_form.username})
@@ -79,19 +96,32 @@ async def login_user(
 @router.get("/email_verification/{email_token}")
 async def verifie_email(
     email_token: str,
-    db = Depends(database.get_db)
+    db=Depends(database.get_db)
 ):
+    """
+    Verify a user's email.
+
+    Args:
+        email_token (str): The email verification token.
+        db: Database session dependency.
+
+    Returns:
+        dict: A dictionary containing a message about the access status.
+    """
     if auth_service.verifie_email_token(email_token, db):
         return {'detail': 'Access'}
 
-
-
-"""
-Debug part
-"""
 @router_debug.get('')
 async def get_users(
-    db = Depends(database.get_db)
-): # get all users
-    return [user for user in db.query(auth.models.User).all()]
+    db=Depends(database.get_db)
+):
+    """
+    Retrieve all users.
 
+    Args:
+        db: Database session dependency.
+
+    Returns:
+        list: A list of all users.
+    """
+    return [user for user in db.query(auth.models.User).all()]
