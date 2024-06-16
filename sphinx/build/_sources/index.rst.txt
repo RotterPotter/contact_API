@@ -1,0 +1,8 @@
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+.. automodule:: my_fastapi_project
+   :members:
+   :undoc-members:
+   :show-inheritance:
